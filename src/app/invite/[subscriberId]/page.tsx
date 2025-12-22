@@ -1,19 +1,24 @@
 import Image from 'next/image'
-import logo from '../../assets/logo.svg'
-import gold from '../../assets/medal-gold.svg'
-import silver from '../../assets/medal-silver.svg'
-import cooper from '../../assets/medal-cooper.svg'
-import { InputField, InputIcon, InputRoot } from '@/components/input'
-import { BadgeCheck, Copy, Link, Medal, MousePointerClick } from 'lucide-react'
-import { IconButton } from '@/components/icon-button'
-import { Ranking } from './ranking'
-import { Stats } from './stats'
+import logo from '../../../assets/logo.svg'
 import { InviteLinkInput } from './invite-link-input'
+import { Stats } from './stats'
+import { Ranking } from './ranking'
+import { Suspense } from 'react'
 
-export default function InvitePage() {
+interface InvitePageProps {
+  params: Promise<{
+    subscriberId: string
+  }>
+}
+
+export default async function InvitePage(props: InvitePageProps) {
+  const { subscriberId } = await props.params
+
+  const inviteLink = `http://localhost:3333/invites/${subscriberId}`
+
   return (
     <div className='min-h-dvh flex items-center justify-between gap-16 flex-col md:flex-row'>
-      <div className='flex flex-col gap-10 w-full max-w-[550px]'>
+      <div className='flex flex-col gap-10 w-full max-w-137.5'>
         <Image src={logo} alt='devstage' width={108.5} height={30} />
 
         <div className='space-y-2'>
@@ -37,13 +42,14 @@ export default function InvitePage() {
             </p>
           </div>
 
-          <InviteLinkInput inviteLink='devstage.com/codecraft-summit-2025/1289' />
+          <InviteLinkInput inviteLink={inviteLink} />
 
-          <Stats />
+          <Stats subscriberId={subscriberId} />
         </div>
       </div>
-
-      <Ranking />
+      <Suspense fallback={'Carregando...'}>
+        <Ranking />
+      </Suspense>
     </div>
   )
 }

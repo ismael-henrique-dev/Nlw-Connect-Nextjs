@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Montserrat, Oxanium } from 'next/font/google'
 import './global.css'
+import { Suspense } from 'react'
 
 export const metadata: Metadata = {
   title: 'devstage',
@@ -24,9 +25,13 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='en' className={`${oxanium.variable} ${montserrat.variable}`}>
-      <body className='bg-gray-900 text-gray-100 antialiased bg-[url(/background.png)] bg-no-repeat bg-top md:bg-right-top'>  
-        <main className='max-w-[1240px] mx-auto px-5 py-8 md:py-0'>{children}</main>
+    <html lang='pt-br' className={`${oxanium.variable} ${montserrat.variable}`}>
+      <body className='bg-gray-900 text-gray-100 antialiased bg-[url(/background.png)] bg-no-repeat bg-top md:bg-right-top'>
+        <main className='max-w-[1240px] mx-auto px-5 py-8 md:py-0'>
+          <Suspense fallback={'Aguarde, a página está carregando'}>
+            {children}
+          </Suspense>
+        </main>
       </body>
     </html>
   )
